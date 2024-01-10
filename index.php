@@ -1,8 +1,17 @@
-<?php 
+<?php
+
   session_start();
 
-  $cards = json_decode(file_get_contents("cards.json"), true);
+  include "storage.php";
 
+  $user = null;
+
+  if(isset($_SESSION['user_id'])) {
+    $storage = new Storage(new JsonIO("users.json"), true);
+    $user = $storage->findById($_SESSION['user_id']);
+  }
+
+/* 
   $error = "";
 
   if(isset($_SESSION['login_error'])) {
@@ -13,7 +22,7 @@
   if(isset($_SESSION['user_id'])) {
     $reg = json_decode(file_get_contents('users.json'), true);
     $user = $reg[$_SESSION['user_id']];
-  }
+  } */
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +42,8 @@
             <ul>
                 <li><a href="index.php">Főoldal</a></li>
                 <?php if(isset($_SESSION['user_id'])): ?>
-                  <div>Üdvözöljük, <?= $_SESSION['user_id'] ?>!</div>
+                    <li><a href="user.php"><?= $_SESSION['user_id'] ?> -
+                        💰<?= $user['money'] ?></a></li>
                   <li><a href="logout.php">Kijelentkezés</a></li>
                 <?php else: ?>
                   <li><a href="login.php">Bejelentkezés</a></li>

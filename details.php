@@ -4,6 +4,13 @@
 
     session_start();
 
+    $user = null;
+
+    if(isset($_SESSION['user_id'])) {
+      $storage = new Storage(new JsonIO("users.json"), true);
+      $user = $storage->findById($_SESSION['user_id']);
+    }
+
     if(isset($_GET["id"])) {
         $storage = new Storage(new JsonIO("cards.json"), true);
         $card = $storage->findById($_GET["id"]);
@@ -34,7 +41,8 @@
             <ul>
                 <li><a href="index.php">Főoldal</a></li>
                 <?php if(isset($_SESSION['user_id'])): ?>
-                  <div>Üdvözöljük, <?= $_SESSION['user_id'] ?>!</div>
+                    <li><a href="user.php"><?= $_SESSION['user_id'] ?> -
+                        💰<?= $user['money'] ?></a></li>
                   <li><a href="logout.php">Kijelentkezés</a></li>
                 <?php else: ?>
                   <li><a href="login.php">Bejelentkezés</a></li>
