@@ -89,6 +89,8 @@
         </nav>
     </header>
 
+    <div id="content">
+
     <h1> Regisztráció </h1>
 
     <div class="container">
@@ -103,6 +105,8 @@
           <?= $errors['password2'] ?? '' ?><br>
         <button type="submit">Regisztráció</button>
       </form>
+    </div>
+
     </div>
 
     <footer>

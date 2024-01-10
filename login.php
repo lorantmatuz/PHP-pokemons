@@ -79,16 +79,17 @@
         </nav>
     </header>
 
-    <h1>Bejelentkezés</h1>
-
-    <div class="container">
-      <form action="login.php" method="post">
-        Felhasználónév: <input type="text" name="user_name" value="<?= $user_name ?>">
-          <?= $errors["user_name"] ?? '' ?> <br>
-        Jelszó: <input type="password" name="password" value="<?= $password ?>">
-          <?= $errors["password"] ?? '' ?> <br>
-        <button type="submit">Bejelentkezés</button>
-      </form>
+    <div id="content">
+      <h1>Bejelentkezés</h1>
+      <div class="container">
+        <form action="login.php" method="post">
+          Felhasználónév: <input type="text" name="user_name" value="<?= $user_name ?>">
+            <?= $errors["user_name"] ?? '' ?> <br>
+          Jelszó: <input type="password" name="password" value="<?= $password ?>">
+            <?= $errors["password"] ?? '' ?> <br>
+          <button type="submit">Bejelentkezés</button>
+        </form>
+      </div>
     </div>
 
     <footer>
