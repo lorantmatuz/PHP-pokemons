@@ -8,7 +8,7 @@ abstract class FileIO implements IFileIO {
 
   public function __construct($filename) {
     if (!is_readable($filename) || !is_writable($filename)) {
-      throw new Exception("Data source ${filename} is invalid.");
+      throw new Exception("Data source {$filename} is invalid.");
     }
     $this->filepath = realpath($filename);
   }
