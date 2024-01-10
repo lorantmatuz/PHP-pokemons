@@ -1,6 +1,6 @@
 <?php
 
-  var_dump($_POST);
+  include "storage.php";
 
   $user_name = $_POST["user_name"] ?? '';
   $password = $_POST["password"] ?? '';
@@ -17,12 +17,11 @@
       $errors['password'] = 'A jelszó megadása kötelező!';
     }
 
-    $reg = json_decode(file_get_contents("users.json"), true);
-    $match = array_keys(array_filter($reg, fn($v) => $v["user_name"] == $user_name));
-    $id = $match[0] ?? null;
-    if($id !== null) {
-      if(password_verify($password, $reg[$id]["password"])) {
-        $_SESSION["user_id"] = $id;
+    $storage = new Storage(new JsonIO("users.json"), true);
+    $user = $storage->findById($user_name);
+    if($user !== null) {
+      if(password_verify($password, $user["password"])) {
+        $_SESSION["user_id"] = $user["user_name"];
         header("location:index.php");
       }
       else {
