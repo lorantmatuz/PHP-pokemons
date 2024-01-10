@@ -106,6 +106,13 @@ header nav ul {
     justify-content: space-between;
 }
 
+header nav ul div {
+    margin: auto 0;
+    color: var(--clr-light);
+    font-size: large;
+    font-weight: bold;
+}
+
 header nav li {
     float: left;
     margin: 0 auto;
