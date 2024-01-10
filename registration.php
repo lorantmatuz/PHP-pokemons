@@ -1,44 +1,64 @@
 <?php
 
-  session_start();
+  var_dump($_POST);
 
-  if (!isset($_SESSION["user_id"]) && !empty($_POST)) {
-    $username = $_POST["username"] ?? '';
-    $password = $_POST["password"] ?? '';
+  $user_name = $_POST['user_name'] ?? '';
+  $email = $_POST['email'] ?? '';
+  $password = $_POST['password'] ?? '';
+  $password2 = $_POST['password2'] ?? '';
 
-    $reg = json_decode(file_get_contents("users.json"), true);
-    $match = array_keys(array_filter($reg, fn($v) => $v["username"] == $username));
+  if(!empty($_POST)) {
+    $errors = [];
 
-    $id = $match[0] ?? null;
-
-    if ($id !== null) {
-      unset($_SESSION["login_error"]);
-      if (password_verify($password, $reg[$id]["password"])) {
-        $_SESSION["user_id"] = $id;
-        header("location:index.php");
-      } else {
-        $_SESSION["login_error"] = "invalid password for username";
-      }
-    } else {
-      $_SESSION["login_error"] = "invalid username";
+    // username
+    if(trim($user_name) === '') {
+      $errors['user_name'] = 'A felhasználónév megadása kötelező';
     }
-  } else {
-    session_unset();
+    // egyedi?
+
+    // email
+    if(trim($email) === '') {
+      $errors['email'] = 'Az email-cím megadása kötelező';
+    } else  {
+      if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'Az e-mail formátuma nem megfelelő';
+      }
+    }
+
+    // passwords
+    if(trim($password) === '') {
+      $errors['password'] = 'A jelszó megadása kötelező';
+    }
+    if(trim($password2) === '') {
+      $errors['password2'] = 'A jelszó megismétlése kötelező';
+    } else {
+      if(trim($password) != trim($password2)) {
+        $errors['password2'] = 'A jelszók nem egyezők';
+      }
+    }
+
+    $errors = array_map(fn($e) => "<span style='color: red'> $e </span>", $errors);
+
+    if(empty($errors)) {
+        $users = json_decode(file_get_contents("users.json"), true);
+
+        $users[$user_name] = [
+          'user_name' => $user_name,
+          'email'=> $email,
+          'password' => password_hash($password, PASSWORD_DEFAULT),
+          'money' => 1000,
+          'admin' => false
+        ];
+
+        file_put_contents("users.json",json_encode($users, JSON_PRETTY_PRINT));
+
+        // login and redirect
+        session_start();
+        $_SESSION["user_id"] = $user_name;
+        header("location:index.php");
+    }
   }
-
-  /**
-   * Regisztráció során meg kell adni felhasználónevet, az e-mail címet 
-   * és a jelszót kétszer. 
-   * Mindegyik kötelező, a felhasználónév legyen egyedi,
-   *  az e-mail cím formátuma legyen helyes, a jelszavak pedig egyezzenek.
-   *  Sikeres regisztráció esetén a felhasználó kapjon x mennyiségű pénzt 
-   * (ezt az összeget ajánlott beleégetned a kódba, mert úgyis azt 
-   * szeretnénk, hogy minden user ugyanannyi pénzt kapjon).
-   */
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="hu">
@@ -73,10 +93,14 @@
 
     <div class="container">
       <form action="registration.php" method="post">
-        Felhasználónév: <input type="text" name="username"> <br>
-        E-mail cím: <input type="text" name="email"> <br>
-        Jelszó: <input type="password" name="password"> <br>
-        Jelszó újra: <input type="password" name="password"> <br>
+        Felhasználónév: <input type="text" name="user_name" value="<?= $user_name ?>">
+          <?= $errors['user_name'] ?? '' ?><br>
+        E-mail cím: <input type="text" name="email" value="<?= $email ?>">
+          <?= $errors['email'] ?? '' ?><br>
+        Jelszó: <input type="password" name="password" value="<?= $password ?>">
+          <?= $errors['password'] ?? '' ?><br>
+        Jelszó újra: <input type="password" name="password2" value="<?= $password2 ?>">
+          <?= $errors['password2'] ?? '' ?><br>
         <button type="submit">Regisztráció</button>
       </form>
     </div>
