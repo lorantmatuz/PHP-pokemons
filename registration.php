@@ -12,28 +12,28 @@
 
     // username
     if(trim($user_name) === '') {
-      $errors['user_name'] = 'A felhasználónév megadása kötelező';
+      $errors['user_name'] = 'A felhasználónév megadása kötelező!';
     }
     // egyedi?
 
     // email
     if(trim($email) === '') {
-      $errors['email'] = 'Az email-cím megadása kötelező';
+      $errors['email'] = 'Az email-cím megadása kötelező!';
     } else  {
       if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Az e-mail formátuma nem megfelelő';
+        $errors['email'] = 'Az e-mail formátuma nem megfelelő!';
       }
     }
 
     // passwords
     if(trim($password) === '') {
-      $errors['password'] = 'A jelszó megadása kötelező';
+      $errors['password'] = 'A jelszó megadása kötelező!';
     }
     if(trim($password2) === '') {
-      $errors['password2'] = 'A jelszó megismétlése kötelező';
+      $errors['password2'] = 'A jelszó megismétlése kötelező!';
     } else {
       if(trim($password) != trim($password2)) {
-        $errors['password2'] = 'A jelszók nem egyezők';
+        $errors['password2'] = 'A jelszók nem egyezők!';
       }
     }
 
@@ -90,23 +90,20 @@
     </header>
 
     <div id="content">
-
-    <h1> Regisztráció </h1>
-
-    <div class="container">
-      <form action="registration.php" method="post">
-        Felhasználónév: <input type="text" name="user_name" value="<?= $user_name ?>">
-          <?= $errors['user_name'] ?? '' ?><br>
-        E-mail cím: <input type="text" name="email" value="<?= $email ?>">
-          <?= $errors['email'] ?? '' ?><br>
-        Jelszó: <input type="password" name="password" value="<?= $password ?>">
-          <?= $errors['password'] ?? '' ?><br>
-        Jelszó újra: <input type="password" name="password2" value="<?= $password2 ?>">
-          <?= $errors['password2'] ?? '' ?><br>
-        <button type="submit">Regisztráció</button>
-      </form>
-    </div>
-
+      <h1> Regisztráció </h1>
+      <div class="container">
+        <form action="registration.php" method="post">
+          Felhasználónév: <input type="text" name="user_name" value="<?= $user_name ?>">
+            <?= $errors['user_name'] ?? '' ?><br>
+          E-mail cím: <input type="text" name="email" value="<?= $email ?>">
+            <?= $errors['email'] ?? '' ?><br>
+          Jelszó: <input type="password" name="password" value="<?= $password ?>">
+            <?= $errors['password'] ?? '' ?><br>
+          Jelszó újra: <input type="password" name="password2" value="<?= $password2 ?>">
+            <?= $errors['password2'] ?? '' ?><br>
+          <button type="submit">Regisztráció</button>
+        </form>
+      </div>
     </div>
 
     <footer>
