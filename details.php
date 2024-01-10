@@ -42,6 +42,7 @@
         </nav>
     </header>
     <div id="content">
+        <h1> <?= $card["name"] ?> </h1>
         <div id="details">
             <div class="image clr-<?= $card["type"] ?>">
                 <img src=<?= $card["image"] ?> alt="">
