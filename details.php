@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+
     if(isset($_GET["id"])) {
         $cards = json_decode(file_get_contents("cards.json"), true);
         if(isset($cards[$_GET["id"]])) {
@@ -26,18 +28,17 @@
 </head>
 
 <body>
-<header>
+    <header>
         <nav>
             <ul>
                 <li><a href="index.php">Főoldal</a></li>
-                <li>
-                    <?php if(isset($_SESSION['user_id'])): ?>
-                        <a href="logout.php">Kijelentkezés</a>
-                    <?php else: ?>
-                        <a href="login.php">Bejelentkezés</a>
-                    <?php endif; ?>
-                </li>
-                <li><a href="registration.php" >Regisztráció</a></li>
+                <?php if(isset($_SESSION['user_id'])): ?>
+                  <div>Üdvözöljük, <?= $_SESSION['user_id'] ?>!</div>
+                  <li><a href="logout.php">Kijelentkezés</a></li>
+                <?php else: ?>
+                  <li><a href="login.php">Bejelentkezés</a></li>
+                  <li><a href="registration.php" >Regisztráció</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </header>
