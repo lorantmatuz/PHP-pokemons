@@ -1,5 +1,7 @@
 <?php
 
+  include "storage.php";
+
   var_dump($_POST);
 
   $user_name = $_POST['user_name'] ?? '';
@@ -14,7 +16,12 @@
     if(trim($user_name) === '') {
       $errors['user_name'] = 'A felhasználónév megadása kötelező!';
     }
-    // egyedi?
+    else {
+      $storage = new Storage(new JsonIO('users.json'), true);
+      if($storage->findById($user_name) !== null) {
+        $errors['user_name'] = 'A felhasználónév egyedi kell legyen!';
+      }
+    }
 
     // email
     if(trim($email) === '') {
@@ -40,22 +47,22 @@
     $errors = array_map(fn($e) => "<span style='color: red'> $e </span>", $errors);
 
     if(empty($errors)) {
-        $users = json_decode(file_get_contents("users.json"), true);
+      $storage = new Storage(new JsonIO("users.json"), true);
 
-        $users[$user_name] = [
-          'user_name' => $user_name,
-          'email'=> $email,
-          'password' => password_hash($password, PASSWORD_DEFAULT),
-          'money' => 1000,
-          'admin' => false
-        ];
+      $storage->update($user_name, [
+        'user_name' => $user_name,
+        'email'=> $email,
+        'password' => password_hash($password, PASSWORD_DEFAULT),
+        'money' => 1000,
+        'admin' => false
+      ]);
 
-        file_put_contents("users.json",json_encode($users, JSON_PRETTY_PRINT));
+      $storage->__destruct();
 
-        // login and redirect
-        session_start();
-        $_SESSION["user_id"] = $user_name;
-        header("location:index.php");
+      // login and redirect
+      session_start();
+      $_SESSION["user_id"] = $user_name;
+      header("location:index.php");
     }
   }
 ?>
