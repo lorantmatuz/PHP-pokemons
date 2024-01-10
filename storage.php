@@ -38,6 +38,7 @@ class SerializeIO extends FileIO {
 
 interface IStorage {
   function add($record): string;
+  public function getKeys();
   function findById(string $id);
   function findAll(array $params = []);
   function findOne(array $params = []);
@@ -71,6 +72,10 @@ class Storage implements IStorage {
     }
     $this->contents[$id] = $record;
     return $id;
+  }
+
+  public function getKeys() {
+    return array_keys($this->contents);
   }
 
   public function findById(string $id) {
