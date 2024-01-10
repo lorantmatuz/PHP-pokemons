@@ -1,12 +1,13 @@
 <?php
 
+    include "storage.php";
+
     session_start();
 
     if(isset($_GET["id"])) {
-        $cards = json_decode(file_get_contents("cards.json"), true);
-        if(isset($cards[$_GET["id"]])) {
-            $card = $cards[$_GET["id"]];
-        } else {
+        $storage = new Storage(new JsonIO("cards.json"), true);
+        $card = $storage->findById($_GET["id"]);
+        if($card === null) {
             header("location: index.php");
         }
     } else {
