@@ -11,18 +11,6 @@
     $user = $storage->findById($_SESSION['user_id']);
   }
 
-/* 
-  $error = "";
-
-  if(isset($_SESSION['login_error'])) {
-    $error = $_SESSION['login_error'];
-    unset($_SESSION['loginerro']);
-  }
-
-  if(isset($_SESSION['user_id'])) {
-    $reg = json_decode(file_get_contents('users.json'), true);
-    $user = $reg[$_SESSION['user_id']];
-  } */
 ?>
 
 <!DOCTYPE html>
