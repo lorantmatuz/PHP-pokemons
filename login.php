@@ -2,52 +2,43 @@
 
   var_dump($_POST);
 
+  $user_name = $_POST["user_name"] ?? '';
+  $password = $_POST["password"] ?? '';
+
   session_start();
 
-  // error converting
-  $errors = [];
-  if(isset($_SESSION['login_error'])) {
-    switch($_SESSION['login_error']) {
-      case 0: {
-        $errors["user_name"] = "Nem létező felhasználónév!";
-        break;
-      }
-      case 1: {
-        $errors["password"] = "A jelszó nem megfelelő!";
-        break;
-      }
-      default: {
-        $errors["default"] = "";
-      }
+  if(!empty($_POST)) {
+    $errors = [];
+
+    if(trim($user_name) === '') {
+      $errors['user_name'] = 'A felhasználónév megadása kötelező!';
     }
-    unset($_SESSION['login_error']);
-  }
-
-  $user_name = '';
-  $password = '';
-
-  // find login info
-  if (!isset($_SESSION["user_id"]) && !empty($_POST)) {
-    $user_name = $_POST["user_name"] ?? '';
-    $password = $_POST["password"] ?? '';
+    if(trim($password) === '') {
+      $errors['password'] = 'A jelszó megadása kötelező!';
+    }
 
     $reg = json_decode(file_get_contents("users.json"), true);
     $match = array_keys(array_filter($reg, fn($v) => $v["user_name"] == $user_name));
-
     $id = $match[0] ?? null;
-
-    if ($id !== null) {
-      if (password_verify($password, $reg[$id]["password"])) {
+    if($id !== null) {
+      if(password_verify($password, $reg[$id]["password"])) {
         $_SESSION["user_id"] = $id;
         header("location:index.php");
-      } else {
-        $_SESSION["login_error"] = 1;
       }
-    } else {
-      $_SESSION["login_error"] = 0;
+      else {
+        if(!array_key_exists("password", $errors)) {
+          $errors["password"] = "A jelszó nem megfelelő!";
+        }
+      }
     }
-  } else {
-    session_unset();
+    else {
+      if(!array_key_exists("user_name", $errors)) {
+        $errors["user_name"] = "Nem létező felhasználónév!";
+      }
+    }
+
+    $errors = array_map(fn($e) => "<span style='color: red'> $e </span>", $errors);
+
   }
 
 ?>
