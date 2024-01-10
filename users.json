@@ -1,14 +1,22 @@
 {
-    "5fcee306a7980": {
-        "username": "test1",
-        "password": "$2y$10$PuoxWYroYs5t1U0rmCJtlekEs2oYPE5XsXN.hiAjZO\/dPeW.5NNi6",
-        "isAdmin": false,
-        "id": "5fcee306a7980"
+    "admin": {
+        "user_name": "admin",
+        "email": "admin@admin.com",
+        "password": "$2y$10$zyMLEk7SKbyt8WFStYK2P.c4wKEBY5UOwfBmj5MwgZ8iEfPHAdyPm",
+        "money": 1000,
+        "cards": [
+            "card0",
+            "card1",
+            "card5"
+        ],
+        "admin": true
     },
-    "5fcee3216105a": {
-        "username": "admin",
-        "password": "$2y$10$PEtzq/U3VebUE4O9TfUJnOYJZWe.kOfPllE6wdcuhaPaFzDXwNNL2",
-        "isAdmin": true,
-        "id": "5fcee3216105a"
+    "teszt elek": {
+        "user_name": "teszt elek",
+        "email": "tesztelek@teszt.hu",
+        "password": "$2y$10$EJC8ZsN7pSKIvrRUO7bQN.nnJXxiq2XkLvNqfAg63d2hzA6DqFBeK",
+        "money": 1000,
+        "cards": [],
+        "admin": false
     }
 }
