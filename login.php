@@ -1,34 +1,59 @@
 <?php
 
+  var_dump($_POST);
+
   session_start();
 
+  // error converting
+  $errors = [];
+  if(isset($_SESSION['login_error'])) {
+    switch($_SESSION['login_error']) {
+      case 0: {
+        $errors["user_name"] = "Nem létező felhasználónév!";
+        break;
+      }
+      case 1: {
+        $errors["password"] = "A jelszó nem megfelelő!";
+        break;
+      }
+      default: {
+        $errors["default"] = "";
+      }
+    }
+    unset($_SESSION['login_error']);
+  }
+
+  $user_name = '';
+  $password = '';
+
+  // find login info
   if (!isset($_SESSION["user_id"]) && !empty($_POST)) {
-    $username = $_POST["username"] ?? '';
+    $user_name = $_POST["user_name"] ?? '';
     $password = $_POST["password"] ?? '';
 
     $reg = json_decode(file_get_contents("users.json"), true);
-    $match = array_keys(array_filter($reg, fn($v) => $v["username"] == $username));
+    $match = array_keys(array_filter($reg, fn($v) => $v["user_name"] == $user_name));
 
     $id = $match[0] ?? null;
 
     if ($id !== null) {
-      unset($_SESSION["login_error"]);
       if (password_verify($password, $reg[$id]["password"])) {
         $_SESSION["user_id"] = $id;
         header("location:index.php");
       } else {
-        $_SESSION["login_error"] = "invalid password for username";
+        $_SESSION["login_error"] = 1;
       }
     } else {
-      $_SESSION["login_error"] = "invalid username";
+      $_SESSION["login_error"] = 0;
     }
   } else {
     session_unset();
   }
+
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 
 <head>
     <meta charset="UTF-8">
@@ -58,8 +83,10 @@
 
     <div class="container">
       <form action="login.php" method="post">
-        Felhasználónév: <input type="text" name="username"> <br>
-        Jelszó: <input type="password" name="password"> <br>
+        Felhasználónév: <input type="text" name="user_name" value="<?= $user_name ?>">
+          <?= $errors["user_name"] ?? '' ?> <br>
+        Jelszó: <input type="password" name="password" value="<?= $password ?>">
+          <?= $errors["password"] ?? '' ?> <br>
         <button type="submit">Bejelentkezés</button>
       </form>
     </div>
