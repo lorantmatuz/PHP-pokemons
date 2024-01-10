@@ -54,6 +54,7 @@
         'email'=> $email,
         'password' => password_hash($password, PASSWORD_DEFAULT),
         'money' => 1000,
+        'cards' => [],
         'admin' => false
       ]);
 
