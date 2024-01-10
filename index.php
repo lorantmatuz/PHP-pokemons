@@ -1,8 +1,6 @@
 <?php 
   session_start();
 
-  //var_dump($_SESSION);
-
   $cards = json_decode(file_get_contents("cards.json"), true);
 
   $error = "";
@@ -15,13 +13,6 @@
   if(isset($_SESSION['user_id'])) {
     $reg = json_decode(file_get_contents('users.json'), true);
     $user = $reg[$_SESSION['user_id']];
-
-    if($user['isAdmin'] /* && isset($_POST['subject']) && isset($_POST['grade']) */) {
-      //$sub = $_POST['subject'];
-      //$grade = intval($_POST['grade']);
-      //$data[$sub]['grade'] = $grade;
-      //file_put_contents('data.json', json_encode($data, JSON_PRETTY_PRINT));
-    }
   }
 ?>
 
@@ -42,6 +33,7 @@
             <ul>
                 <li><a href="index.php">Főoldal</a></li>
                 <?php if(isset($_SESSION['user_id'])): ?>
+                  <div>Üdvözöljük, <?= $_SESSION['user_id'] ?>!</div>
                   <li><a href="logout.php">Kijelentkezés</a></li>
                 <?php else: ?>
                   <li><a href="login.php">Bejelentkezés</a></li>
