@@ -71,10 +71,10 @@
 
     $errors = array_map(fn($e) => "<span style='color: red'> $e </span>", $errors);
 
-    var_dump($errors);
-
     if(empty($errors)) {
       $cards = new Cards(new JsonIO("cards.json"), true);
+
+      $nextId = $cards->getNextId();
 
       $cards->updateRecord([
         "name" => $card_name,
@@ -86,6 +86,8 @@
         "description" => $description,
         "image" => $image
       ]);
+
+      $users->addCard("admin", $nextId);
 
       header("location:index.php");
     }
@@ -110,7 +112,6 @@
     <nav>
       <ul>
         <li><a href="index.php">Főoldal</a></li>
-        <li><a href="user.php">Admin oldal</a></li>
         <li><a href="card.php">Új kártya</a></li>
         <li><a href="logout.php">Kijelentkezés</a></li>
       </ul>
