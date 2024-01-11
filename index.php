@@ -10,6 +10,10 @@
     return $res;
   }
 
+  function functionAlert($message) {
+    echo "<script>alert('$message');</script>";
+  }
+
   session_start();
 
   include "storage.php";
@@ -40,15 +44,12 @@
     $cardId = $_POST['card_id'];
     $price = $cards->findById($cardId)["price"];
     if(!$users->updateByValueOfId($_SESSION['user_id'], -$price)) {
-      // túl drága
-      var_dump("Túl drága!");
+      functionAlert("A kiválasztott kártya túl drága!");
     } else {
       if(!$users->addCard($_SESSION['user_id'], $cardId)) {
-        // túl sok kártya van már
-        var_dump("Túl sok kártya van már!");
+        functionAlert("Maximális számú kártyája van már!");
       }
       else {
-        // siker
         $users->deleteCard("admin", $cardId);
         header("location: index.php");
       }
