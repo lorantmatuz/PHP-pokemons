@@ -18,9 +18,9 @@
   if(isset($_POST['card_id'])) {
     $cardId = $_POST['card_id'];
     $price = $cards->findById($cardId)["price"];
-    $users->deleteByValueOfId($_SESSION['user_id'], 'cards', $cardId);
-    $users->updateByValueOfId($_SESSION['user_id'], 'money', $price * 0.9);
-    // TODO: back to admin's cards!
+    $users->deleteCard($_SESSION['user_id'], $cardId);
+    $users->updateByValueOfId($_SESSION['user_id'], $price * 0.9);
+    $users->addCard("admin", $cardId);
     header("location: user.php");
   }
 
@@ -87,7 +87,7 @@
           <?php if(!$isAdmin): ?>
           <form method="post">
             <input type="hidden" name="card_id" value="<?= $cardId ?>">
-            <input type="submit" name="sell" value="Eladás" />
+            <input class="buy" type="submit" name="sell" value="Eladás" />
           </form>
           <?php endif; ?>
         </div>
