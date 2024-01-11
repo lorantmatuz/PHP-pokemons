@@ -11,7 +11,7 @@ form {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-form input {
+form input, form select {
   width: 100%;
   padding: 10px;
   margin: 8px 0;
