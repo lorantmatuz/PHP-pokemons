@@ -7,7 +7,7 @@
 
   session_start();
 
-  if(!empty($_POST)) {
+  if(!empty($_POST) && !isset($_POST['buy'])) {
     $errors = [];
 
     if(trim($user_name) === '') {
