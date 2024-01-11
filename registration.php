@@ -2,8 +2,6 @@
 
   include "storage.php";
 
-  var_dump($_POST);
-
   $user_name = $_POST['user_name'] ?? '';
   $email = $_POST['email'] ?? '';
   $password = $_POST['password'] ?? '';
