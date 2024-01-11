@@ -38,7 +38,6 @@ class SerializeIO extends FileIO {
 
 interface IStorage {
   function add($record): string;
-  public function getKeys();
   function findById(string $id);
   function findAll(array $params = []);
   function findOne(array $params = []);
@@ -72,10 +71,6 @@ class Storage implements IStorage {
     }
     $this->contents[$id] = $record;
     return $id;
-  }
-
-  public function getKeys() {
-    return array_keys($this->contents);
   }
 
   public function findById(string $id) {
@@ -124,4 +119,23 @@ class Storage implements IStorage {
       return !$condition($item);
     });
   }
+}
+
+class Cards extends Storage {
+  public function getKeys() {
+    return array_keys($this->contents);
+  }
+}
+
+class Users extends Storage {
+  public function refresh() {
+    $this->io->save($this->contents);
+  }
+
+  public function deleteByValueOfId(string $id, string $arrayId, $value) {
+    if (($idx = array_search($value, $this->contents[$id][$arrayId])) !== false) {
+      unset($this->contents[$id][$arrayId][$idx]);
+    }
+  }
+
 }
