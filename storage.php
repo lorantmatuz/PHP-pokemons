@@ -130,7 +130,7 @@ class Cards extends Storage {
     $this->contents[$this->getNextId()] = $record;
   }
 
-  private function getNextId() {
+  public function getNextId() {
     return "card" . count(array_keys($this->contents));
   }
 }
