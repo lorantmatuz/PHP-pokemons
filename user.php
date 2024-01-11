@@ -14,7 +14,10 @@
   // delete from user cards and reload
   if(isset($_POST['card_id'])) {
     $cardId = $_POST['card_id'];
+    $price = $cards->findById($cardId)["price"];
     $users->deleteByValueOfId($_SESSION['user_id'], 'cards', $cardId);
+    $users->updateByValueOfId($_SESSION['user_id'], 'money', $price * 0.9);
+    // TODO: back to admin's cards!
     header("location: user.php");
   }
 

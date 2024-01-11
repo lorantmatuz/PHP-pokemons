@@ -138,4 +138,8 @@ class Users extends Storage {
     }
   }
 
+  public function updateByValueOfId(string $id, string $valueId, $value) {
+    $this->contents[$id][$valueId] += $value;
+  }
+
 }
