@@ -4,14 +4,20 @@
 
   include "storage.php";
 
-  $user = null;
+  $users = new Users(new JsonIO("users.json"), true);
+  $cards = new Cards(new JsonIO("cards.json"), true);
 
   if(isset($_SESSION['user_id'])) {
-    $storage = new Storage(new JsonIO("users.json"), true);
-    $user = $storage->findById($_SESSION['user_id']);
+    $user = $users->findById($_SESSION['user_id']);
   }
 
-  $cards = new Storage(new JsonIO("cards.json"), true);
+  // delete from user cards and reload
+  if(isset($_POST['card_id'])) {
+    $cardId = $_POST['card_id'];
+    $users->deleteByValueOfId($_SESSION['user_id'], 'cards', $cardId);
+    header("location: user.php");
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -66,6 +72,10 @@
                   <span class="card-defense"><span class="icon">🛡</span> <?= $card['defense'] ?></span>
               </span>
           </div>
+          <form method="post">
+            <input type="hidden" name="card_id" value="<?= $cardId ?>">
+            <input type="submit" name="sell" value="Eladás" />
+          </form>
         </div>
       <?php endforeach; ?>
     </div>
