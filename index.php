@@ -5,13 +5,13 @@
   include "storage.php";
 
   $user = null;
+  $users = new Users(new JsonIO("users.json"), true);
 
   if(isset($_SESSION['user_id'])) {
-    $storage = new Storage(new JsonIO("users.json"), true);
-    $user = $storage->findById($_SESSION['user_id']);
+    $user = $users->findById($_SESSION['user_id']);
   }
 
-  $cards = new Storage(new JsonIO("cards.json"), true);
+  $cards = new Cards(new JsonIO("cards.json"), true);
   $filteredCardIds = $cards->getKeys();
 
   $filter = '';

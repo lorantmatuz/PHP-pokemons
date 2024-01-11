@@ -17,8 +17,8 @@
       $errors['user_name'] = 'A felhasználónév megadása kötelező!';
     }
     else {
-      $storage = new Storage(new JsonIO('users.json'), true);
-      if($storage->findById($user_name) !== null) {
+      $users = new Users(new JsonIO('users.json'), true);
+      if($users->findById($user_name) !== null) {
         $errors['user_name'] = 'A felhasználónév egyedi kell legyen!';
       }
     }
@@ -47,9 +47,9 @@
     $errors = array_map(fn($e) => "<span style='color: red'> $e </span>", $errors);
 
     if(empty($errors)) {
-      $storage = new Storage(new JsonIO("users.json"), true);
+      $users = new Users(new JsonIO("users.json"), true);
 
-      $storage->update($user_name, [
+      $users->update($user_name, [
         'user_name' => $user_name,
         'email'=> $email,
         'password' => password_hash($password, PASSWORD_DEFAULT),
@@ -58,7 +58,8 @@
         'admin' => false
       ]);
 
-      $storage->__destruct();
+      //$users->__destruct();
+      $users->refresh();
 
       // login and redirect
       session_start();
