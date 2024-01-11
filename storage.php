@@ -136,18 +136,35 @@ class Cards extends Storage {
 }
 
 class Users extends Storage {
+
+  public function adminCards() {
+    return $this->contents["admin"]["cards"];
+  }
+
   public function refresh() {
     $this->io->save($this->contents);
   }
 
-  public function deleteByValueOfId(string $id, string $arrayId, $value) {
-    if (($idx = array_search($value, $this->contents[$id][$arrayId])) !== false) {
-      unset($this->contents[$id][$arrayId][$idx]);
+  public function deleteCard(string $id, $value) {
+    if (($idx = array_search($value, $this->contents[$id]["cards"])) !== false) {
+      unset($this->contents[$id]["cards"][$idx]);
     }
   }
 
-  public function updateByValueOfId(string $id, string $valueId, $value) {
-    $this->contents[$id][$valueId] += $value;
+  public function addCard(string $id, $value) {
+    if($id !== 'admin' && count($this->contents[$id]["cards"]) >= 5) {
+      return false;
+    }
+    array_push($this->contents[$id]["cards"], $value);
+    return true;
+  }
+
+  public function updateByValueOfId(string $id, $value) {
+    if(0 > $value && $this->contents[$id]["money"] < -$value) {
+      return false;
+    }
+    $this->contents[$id]["money"] += $value;
+    return true;
   }
 
 }
