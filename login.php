@@ -1,11 +1,15 @@
 <?php
 
+  session_start();
+
+  if(isset($_SESSION['user_id'])) {
+    header("location: index.php");
+  }
+
   include "storage.php";
 
   $user_name = $_POST["user_name"] ?? '';
   $password = $_POST["password"] ?? '';
-
-  session_start();
 
   if(!empty($_POST) && !isset($_POST['buy'])) {
     $errors = [];
