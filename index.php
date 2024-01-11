@@ -5,10 +5,12 @@
   include "storage.php";
 
   $user = null;
+  $isAdmin = false;
   $users = new Users(new JsonIO("users.json"), true);
 
   if(isset($_SESSION['user_id'])) {
     $user = $users->findById($_SESSION['user_id']);
+    $isAdmin = $user["admin"];
   }
 
   $cards = new Cards(new JsonIO("cards.json"), true);
@@ -41,21 +43,28 @@
 </head>
 
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.php">Főoldal</a></li>
-                <?php if(isset($_SESSION['user_id'])): ?>
-                    <li><a href="user.php"><?= $_SESSION['user_id'] ?> -
-                        💰<?= $user['money'] ?></a></li>
+  <header>
+      <nav>
+          <ul>
+              <li><a href="index.php">Főoldal</a></li>
+              <?php if(isset($_SESSION['user_id'])): ?>
+                  <?php if($isAdmin): ?>
+                    <li><a href="user.php">Admin oldal</a></li>
+                    <li><a href="card.php">Új kártya</a></li>
+                  <?php else: ?>
+                      <li>
+                          <a href="user.php"><?= $_SESSION['user_id'] ?> - 💰<?= $user['money'] ?></a>
+                      </li>
+                  <?php endif; ?>
                   <li><a href="logout.php">Kijelentkezés</a></li>
-                <?php else: ?>
+              <?php else: ?>
                   <li><a href="login.php">Bejelentkezés</a></li>
                   <li><a href="registration.php" >Regisztráció</a></li>
-                <?php endif; ?>
-            </ul>
-        </nav>
-    </header>
+              <?php endif; ?>
+          </ul>
+      </nav>
+  </header>
+
     <div id="content">
         <h1> Kártyák </h1>
         <form method="get">
