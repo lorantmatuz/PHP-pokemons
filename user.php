@@ -7,8 +7,11 @@
   $users = new Users(new JsonIO("users.json"), true);
   $cards = new Cards(new JsonIO("cards.json"), true);
 
+  $isAdmin = false;
+
   if(isset($_SESSION['user_id'])) {
     $user = $users->findById($_SESSION['user_id']);
+    $isAdmin = $user["admin"];
   }
 
   // delete from user cards and reload
@@ -38,15 +41,21 @@
   <header>
     <nav>
       <ul>
-        <li><a href="index.php">Főoldal</a></li>
-        <?php if(isset($_SESSION['user_id'])): ?>
-          <li><a href="user.php"><?= $_SESSION['user_id'] ?> -
-              💰<?= $user['money'] ?></a></li>
-          <li><a href="logout.php">Kijelentkezés</a></li>
-        <?php else: ?>
-          <li><a href="login.php">Bejelentkezés</a></li>
-          <li><a href="registration.php" >Regisztráció</a></li>
-        <?php endif; ?>
+          <li><a href="index.php">Főoldal</a></li>
+          <?php if(isset($_SESSION['user_id'])): ?>
+              <?php if($isAdmin): ?>
+                <li><a href="user.php">Admin oldal</a></li>
+                <li><a href="card.php">Új kártya</a></li>
+              <?php else: ?>
+                  <li>
+                      <a href="user.php"><?= $_SESSION['user_id'] ?> - 💰<?= $user['money'] ?></a>
+                  </li>
+              <?php endif; ?>
+              <li><a href="logout.php">Kijelentkezés</a></li>
+          <?php else: ?>
+              <li><a href="login.php">Bejelentkezés</a></li>
+              <li><a href="registration.php" >Regisztráció</a></li>
+          <?php endif; ?>
       </ul>
     </nav>
   </header>
@@ -75,10 +84,12 @@
                   <span class="card-defense"><span class="icon">🛡</span> <?= $card['defense'] ?></span>
               </span>
           </div>
+          <?php if(!$isAdmin): ?>
           <form method="post">
             <input type="hidden" name="card_id" value="<?= $cardId ?>">
             <input type="submit" name="sell" value="Eladás" />
           </form>
+          <?php endif; ?>
         </div>
       <?php endforeach; ?>
     </div>
