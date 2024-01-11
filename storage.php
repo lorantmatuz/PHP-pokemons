@@ -125,6 +125,14 @@ class Cards extends Storage {
   public function getKeys() {
     return array_keys($this->contents);
   }
+
+  public function updateRecord($record) {
+    $this->contents[$this->getNextId()] = $record;
+  }
+
+  private function getNextId() {
+    return "card" . count(array_keys($this->contents));
+  }
 }
 
 class Users extends Storage {
