@@ -7,16 +7,15 @@
         "cards": [
             "card0",
             "card1",
-            "card5"
+            "card2",
+            "card3",
+            "card4",
+            "card5",
+            "card6",
+            "card7",
+            "card8",
+            "card9"
         ],
         "admin": true
-    },
-    "teszt elek": {
-        "user_name": "teszt elek",
-        "email": "tesztelek@teszt.hu",
-        "password": "$2y$10$EJC8ZsN7pSKIvrRUO7bQN.nnJXxiq2XkLvNqfAg63d2hzA6DqFBeK",
-        "money": 1000,
-        "cards": [],
-        "admin": false
     }
 }
