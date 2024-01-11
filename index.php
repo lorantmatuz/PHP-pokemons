@@ -1,5 +1,15 @@
 <?php
 
+  function filtering($cards, array $arr, $filter) {
+    $res = [];
+    foreach($arr as $cardId) {
+      if($cards->findById($cardId)["type"] === $filter) {
+        array_push($res, $cardId);
+      }
+    }
+    return $res;
+  }
+
   session_start();
 
   include "storage.php";
@@ -14,19 +24,35 @@
   }
 
   $cards = new Cards(new JsonIO("cards.json"), true);
-  $filteredCardIds = $cards->getKeys();
+  $filteredCardIds =  $users->adminCards();
 
   $filter = '';
 
   if(isset($_GET['filter'])) {
     $filter = $_GET['filter'];
     if($filter !=='') {
-        $filteredCardIds = array_keys($cards->findAll(["type" => $filter]));
-    } else {
-        $filteredCardIds = $cards->getKeys();
+      $filteredCardIds = filtering($cards, $filteredCardIds, $filter);
     }
-  } else {
-    $filteredCardIds = $cards->getKeys();
+  }
+
+  // buy it
+  if(isset($_POST['card_id'])) {
+    $cardId = $_POST['card_id'];
+    $price = $cards->findById($cardId)["price"];
+    if(!$users->updateByValueOfId($_SESSION['user_id'], -$price)) {
+      // túl drága
+      var_dump("Túl drága!");
+    } else {
+      if(!$users->addCard($_SESSION['user_id'], $cardId)) {
+        // túl sok kártya van már
+        var_dump("Túl sok kártya van már!");
+      }
+      else {
+        // siker
+        $users->deleteCard("admin", $cardId);
+        header("location: index.php");
+      }
+    }
   }
 
 ?>
@@ -97,7 +123,13 @@
                   <span class="card-defense"><span class="icon">🛡</span> <?= $card['defense'] ?></span>
               </span>
           </div>
-        </div>
+          <?php if(isset($_SESSION['user_id']) && !$isAdmin): ?>
+            <form method="post">
+              <input type="hidden" name="card_id" value="<?= $cardId ?>">
+              <input class="buy" type="submit" name="buy" value="Vásárlás" />
+            </form>
+          <?php endif; ?>
+          </div>
       <?php endforeach; ?>
 
     </div>
