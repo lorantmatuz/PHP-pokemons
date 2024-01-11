@@ -12,6 +12,10 @@
   if(isset($_SESSION['user_id'])) {
     $user = $users->findById($_SESSION['user_id']);
     $isAdmin = $user["admin"];
+    // no view for admin
+    if($isAdmin) {
+      header("location: index.php");
+    }
   }
 
   // delete from user cards and reload
@@ -43,14 +47,8 @@
       <ul>
           <li><a href="index.php">Főoldal</a></li>
           <?php if(isset($_SESSION['user_id'])): ?>
-              <?php if($isAdmin): ?>
-                <li><a href="user.php">Admin oldal</a></li>
-                <li><a href="card.php">Új kártya</a></li>
-              <?php else: ?>
-                  <li>
-                      <a href="user.php"><?= $_SESSION['user_id'] ?> - 💰<?= $user['money'] ?></a>
-                  </li>
-              <?php endif; ?>
+              <li><a href="user.php"><?= $_SESSION['user_id'] ?></a></li>
+              <li><a href="user.php">💰<?= $user['money'] ?></a></li>
               <li><a href="logout.php">Kijelentkezés</a></li>
           <?php else: ?>
               <li><a href="login.php">Bejelentkezés</a></li>
@@ -73,7 +71,9 @@
               $card = $cards->findById($cardId); ?>
         <div class="pokemon-card">
           <div class="image clr-<?= $card["type"] ?>">
-            <img src="<?= $card["image"] ?>" alt="">
+            <a href="details.php?id=<?= $cardId ?>">
+              <img src="<?= $card["image"] ?>" alt="">
+            </a>
           </div>
           <div class="details">
               <h2><a href="details.php?id=<?= $cardId ?>"><?= $card["name"] ?></a></h2>
@@ -83,13 +83,12 @@
                   <span class="card-attack"><span class="icon">⚔</span> <?= $card['attack'] ?></span>
                   <span class="card-defense"><span class="icon">🛡</span> <?= $card['defense'] ?></span>
               </span>
+              <span class="card-price"> <span class="icon">💰</span><?= $card["price"] * 0.9 ?> </span>
           </div>
-          <?php if(!$isAdmin): ?>
           <form method="post">
             <input type="hidden" name="card_id" value="<?= $cardId ?>">
             <input class="buy" type="submit" name="sell" value="Eladás" />
           </form>
-          <?php endif; ?>
         </div>
       <?php endforeach; ?>
     </div>
