@@ -16,6 +16,8 @@
     if($isAdmin) {
       header("location: index.php");
     }
+  } else {
+    header("location: index.php");
   }
 
   // delete from user cards and reload
