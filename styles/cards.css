@@ -62,7 +62,7 @@
     font-weight: bold;
 }
 
-.pokemon-card .buy {
+.pokemon-card .buy, .detail-buy .buy {
     background-color: var(--clr-main);
     border-radius: 0 0 8px 8px;
     color: var(--clr-white);
@@ -72,7 +72,7 @@
     transition: 0.2s;
 }
 
-.pokemon-card .buy:hover {
+.pokemon-card .buy:hover, .detail-buy .buy:hover {
     background-color: var(--clr-highlight);
     margin-top: -5px;
     padding-bottom: 15px;
